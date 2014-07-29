@@ -1,0 +1,24 @@
+{
+  "name": "jquery-custom-steps",
+  "version": "0.0.0",
+  "authors": [
+    "Thiago Rodrigues de Paula <thiago.rdp@gmail.com>"
+  ],
+  "description": "Flexible form wizard manager for jQuery.",
+  "main": "jquery.custom.steps.js",
+  "keywords": [
+    "steps",
+    "wizard",
+    "jquery",
+    "javascript",
+    "flexible"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

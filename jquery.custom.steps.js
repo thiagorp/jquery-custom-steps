@@ -4,6 +4,9 @@
 		var settings = $.extend({}, $.fn.customSteps.defaults, options);
 
 		var buildSteps = function(element, options) {
+			var navContainer = $(options.navigationContainerSelector);
+			var stepsContainer = $(options.stepsContainerSelector);
+
 			return (stepsObj = {
 				restart: function() {
 				},
@@ -21,6 +24,7 @@
 		};
 
 		return this.each(function() {
+			buildSteps(element, settings);
 		});
 	};
 

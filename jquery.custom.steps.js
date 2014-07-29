@@ -1,7 +1,6 @@
 (function($) {
 
 	$.fn.customSteps = function(options) {
-		var settings = $.extend({}, $.fn.customSteps.defaults, options);
 
 		var getWizard = function(el) {
 			return el.data('wizard');
@@ -11,10 +10,9 @@
 			init: function(options) {
 				var navContainer = this.find(options.navigationContainerSelector);
 				var stepsContainer = this.find(options.stepsContainerSelector);
-
 				var currentStep = 1;
 
-				return (stepsObj = {
+				var stepsObj = {
 					restart: function() {
 						currentStep = 1;
 
@@ -36,14 +34,19 @@
 
 						navContainer.find(options.navigationSelector + ':eq(' + n + ')').addClass('active');
 						stepsContainer.find(options.stepSelector + ':eq(' + n + ')').addClass('active');
+
+						currentStep = n;
 					},
 					next: function() {
-						goTo(currentStep+1);
+						stepsObj.goTo(currentStep+1);
 					},
 					previous: function() {
-						goTo(currentStep-1);
+						stepsObj.goTo(currentStep-1);
 					}
-				});
+				};
+
+				stepsObj.goTo(1);
+				return stepsObj;
 			},
 			next: function() {
 				var wizard = getWizard(this);
@@ -55,14 +58,19 @@
 			}
 		};
 
+		var args = arguments;
 		return this.each(function() {
+			var elem = $(this);
+
 			if (typeof options == 'string') {
 				if (methods[options]) {
-					methods[options].apply(this, [].slice.call(arguments, 1));
+					methods[options].apply(elem, [].slice.call(args, 1));
 				}
 			} else {
-				var wizard = methods.init.apply(this, arguments);
-				this.data('wizard', wizard);
+				var options = args[0];
+				var settings = $.extend({}, $.fn.customSteps.defaults, options);
+				var wizard = methods.init.call(elem, settings);
+				elem.data('wizard', wizard);
 			}
 		});
 	};

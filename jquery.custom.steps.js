@@ -32,8 +32,8 @@
 						navContainer.find(options.navigationSelector + '.active').removeClass('active');
 						stepsContainer.find(options.stepSelector + '.active').removeClass('active');
 
-						navContainer.find(options.navigationSelector + ':eq(' + n + ')').addClass('active');
-						stepsContainer.find(options.stepSelector + ':eq(' + n + ')').addClass('active');
+						navContainer.find(options.navigationSelector + ':eq(' + (n-1) + ')').addClass('active');
+						stepsContainer.find(options.stepSelector + ':eq(' + (n-1) + ')').addClass('active');
 
 						currentStep = n;
 					},
@@ -55,6 +55,10 @@
 			previous: function() {
 				var wizard = getWizard(this);
 				wizard.previous();
+			},
+			goTo: function(n) {
+				var wizard = getWizard(this);
+				wizard.goTo(n);
 			}
 		};
 

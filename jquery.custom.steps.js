@@ -34,14 +34,27 @@
 						var currentNavElem = getNav(currentStep);
 						var currentStepElem = getStep(currentStep);
 
-						var nextNav = getNav(n);
-						var nextStep = getStep(n);
+						var nextStep;
+
+						if (n > currentStep) {
+							for (var i = currentStep; i <= n; i++) {
+								nextStep = i;
+								if (!options.canGoForward(i, getStep(i))) {
+									break;
+								}
+							}
+						} else {
+							nextStep = n;
+						}
+
+						var nextNavObj = getNav(nextStep);
+						var nextStepObj = getStep(nextStep);
 
 						$.fn.customSteps.transitions.animateStepOut(currentStep, currentStepElem, function() {
 							$.fn.customSteps.transitions.animateNavOut(currentStep, currentNavElem, function() {
-								$.fn.customSteps.transitions.animateNavIn(n, nextNav, function() {
-									$.fn.customSteps.transitions.animateStepIn(n, nextStep, function() {
-										currentStep = n;
+								$.fn.customSteps.transitions.animateNavIn(nextStep, nextNavObj, function() {
+									$.fn.customSteps.transitions.animateStepIn(nextStep, nextStepObj, function() {
+										currentStep = nextStep;
 									});
 								});
 							});
@@ -93,7 +106,9 @@
 			navigationSelector: '.step-nav',
 			stepsContainerSelector: '.steps-container',
 			stepSelector: '.step',
-			fields: []
+			canGoForward: function(step, element) {
+				return true;
+			}
 	};
 
 	$.fn.customSteps.transitions = {

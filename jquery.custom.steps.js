@@ -12,15 +12,17 @@
 				var stepsContainer = this.find(options.stepsContainerSelector);
 				var currentStep = 1;
 
+				var getNav = function(n) {
+					return navContainer.find(options.navigationSelector + ':eq(' + (n-1) + ')');
+				};
+
+				var getStep = function(n) {
+					return stepsContainer.find(options.stepSelector + ':eq(' + (n-1) + ')');
+				};
+
 				var stepsObj = {
 					restart: function() {
-						currentStep = 1;
-
-						navContainer.find(options.navigationSelector + '.active').removeClass('active');
-						stepsContainer.find(options.stepSelector + '.active').removeClass('active');
-
-						navContainer.find(options.navigationSelector + ':first-child').addClass('active');
-						stepsContainer.find(options.stepSelector + ':first-child').addClass('active');
+						stepsObj.goTo(1);
 					},
 					numberOfSteps: function() {
 						return stepsContainer.find(options.stepSelector).length;
@@ -29,13 +31,21 @@
 						return currentStep;
 					},
 					goTo: function(n) {
-						navContainer.find(options.navigationSelector + '.active').removeClass('active');
-						stepsContainer.find(options.stepSelector + '.active').removeClass('active');
+						var currentNavElem = getNav(currentStep);
+						var currentStepElem = getStep(currentStep);
 
-						navContainer.find(options.navigationSelector + ':eq(' + (n-1) + ')').addClass('active');
-						stepsContainer.find(options.stepSelector + ':eq(' + (n-1) + ')').addClass('active');
+						var nextNav = getNav(n);
+						var nextStep = getStep(n);
 
-						currentStep = n;
+						$.fn.customSteps.transitions.animateStepOut(currentStep, currentStepElem, function() {
+							$.fn.customSteps.transitions.animateNavOut(currentStep, currentNavElem, function() {
+								$.fn.customSteps.transitions.animateNavIn(n, nextNav, function() {
+									$.fn.customSteps.transitions.animateStepIn(n, nextStep, function() {
+										currentStep = n;
+									});
+								});
+							});
+						});
 					},
 					next: function() {
 						stepsObj.goTo(currentStep+1);
@@ -45,7 +55,6 @@
 					}
 				};
 
-				stepsObj.goTo(1);
 				return stepsObj;
 			},
 			next: function() {
@@ -85,6 +94,25 @@
 			stepsContainerSelector: '.steps-container',
 			stepSelector: '.step',
 			fields: []
+	};
+
+	$.fn.customSteps.transitions = {
+		animateNavOut: function(navStep, element, cb) {
+			element.removeClass('active');
+			cb && cb();
+		},
+		animateNavIn: function(navStep, element, cb) {
+			element.addClass('active');
+			cb && cb();
+		},
+		animateStepOut: function(step, element, cb) {
+			element.removeClass('active');
+			cb && cb();
+		},
+		animateStepIn: function(step, element,cb) {
+			element.addClass('active');
+			cb && cb();
+		}
 	};
 
 }(jQuery));

@@ -61,13 +61,13 @@
 		var args = arguments;
 		return this.each(function() {
 			var elem = $(this);
+			var options = args[0];
 
 			if (typeof options == 'string') {
 				if (methods[options]) {
 					methods[options].apply(elem, [].slice.call(args, 1));
 				}
 			} else {
-				var options = args[0];
 				var settings = $.extend({}, $.fn.customSteps.defaults, options);
 				var wizard = methods.init.call(elem, settings);
 				elem.data('wizard', wizard);

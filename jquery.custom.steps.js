@@ -39,7 +39,7 @@
 						if (n > currentStep) {
 							for (var i = currentStep; i <= n; i++) {
 								nextStep = i;
-								if (!options.canGoForward(i, getStep(i))) {
+								if (i == n || !options.canGoForward(i, getStep(i))) {
 									break;
 								}
 							}
